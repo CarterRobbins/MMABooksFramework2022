@@ -57,27 +57,25 @@ namespace MMABooksDB
         {
             var props = (ProductProps)p;
 
-            var fresh = (ProductProps)Retrieve(props.ProductCode);
-            props.ConcurrencyID = fresh.ConcurrencyID;
-
-            int rows = 0;
             var command = new DBCommand
             {
                 CommandText = "usp_ProductDelete",
                 CommandType = CommandType.StoredProcedure
             };
             command.Parameters.Add("prodcode_p", DBDbType.VarChar).Value = props.ProductCode;
-            command.Parameters.Add("conCurrId", DBDbType.Int32).Value = props.ConcurrencyID;
+            command.Parameters.Add("conCurrId", DBDbType.Int32).Value = props.ConcurrencyID; // <-- original value
 
             try
             {
-                rows = RunNonQueryProcedure(command);
+                int rows = RunNonQueryProcedure(command);
                 if (rows == 1) return true;
+
                 throw new Exception("Record cannot be deleted; it has been edited by another user.");
             }
             finally
             {
-                if (mConnection.State == ConnectionState.Open) mConnection.Close();
+                if (mConnection.State == ConnectionState.Open)
+                    mConnection.Close();
             }
         }
 
@@ -143,11 +141,6 @@ namespace MMABooksDB
         {
             var props = (ProductProps)p;
 
-            
-            var fresh = (ProductProps)Retrieve(props.ProductCode);
-            props.ConcurrencyID = fresh.ConcurrencyID;
-
-            int rowsAffected = 0;
             var command = new DBCommand
             {
                 CommandText = "usp_ProductUpdate",
@@ -158,21 +151,22 @@ namespace MMABooksDB
             command.Parameters.Add("description_p", DBDbType.VarChar).Value = props.Description;
             command.Parameters.Add("unitprice_p", DBDbType.Decimal).Value = props.UnitPrice;
             command.Parameters.Add("onhandqty_p", DBDbType.Int32).Value = props.OnHandQuantity;
-            command.Parameters.Add("conCurrId", DBDbType.Int32).Value = props.ConcurrencyID;
-
+            command.Parameters.Add("conCurrId", DBDbType.Int32).Value = props.ConcurrencyID;  
             try
             {
-                rowsAffected = RunNonQueryProcedure(command);
-                if (rowsAffected == 1)
+                int rows = RunNonQueryProcedure(command);
+                if (rows == 1)
                 {
-                    props.ConcurrencyID++;
+                    props.ConcurrencyID++;   
                     return true;
                 }
+
                 throw new Exception("Record cannot be updated; it has been edited by another user.");
             }
             finally
             {
-                if (mConnection.State == ConnectionState.Open) mConnection.Close();
+                if (mConnection.State == ConnectionState.Open)
+                    mConnection.Close();
             }
         }
     }
