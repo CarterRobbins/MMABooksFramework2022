@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="MMABooksTools.ConfigDB">
+    <Position X="8.25" Y="4.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>ConfigDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMABooksTools.BrokenRules" Collapsed="true">
+    <Position X="4.75" Y="6.5" Width="2.75" />
+    <NestedTypes>
+      <Delegate Name="MMABooksTools.BrokenRules.HandleBrokenRule" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>BrokenRules.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="MMABooksTools.BrokenRules.HandleNoBrokenRules" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>BrokenRules.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAEAAAAAAAwAAAAAAAAAAAAAQABAAAA=</HashCode>
+      <FileName>BrokenRules.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMABooksTools.BaseBusiness">
+    <Position X="1.25" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AQgAgIAABAAQAAgEJCgAAAAAAAUAABAAAEABUQAoBAI=</HashCode>
+      <FileName>BaseBusiness.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMABooksTools.BaseSQLDB">
+    <Position X="8.25" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAACAAAAAAgAAAAAAAACABEAAAAAA=</HashCode>
+      <FileName>BaseSQLDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="MMABooksTools.IWriteDB">
+    <Position X="4.75" Y="4.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>IWriteDB.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MMABooksTools.IBaseProps">
+    <Position X="4.75" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAABEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IBaseProps.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MMABooksTools.IReadDB">
+    <Position X="4.75" Y="2.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>IReadDB.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
