@@ -45,7 +45,7 @@ namespace MMABooksProps
         public void SetState(DBDataReader dr)
         {
             this.ProductCode = ((string)dr["ProductCode"]).Trim();
-            this.Description = (string)dr["Description"];
+            this.Description = ((string)dr["Description"]).Trim();
             this.UnitPrice = (decimal)dr["UnitPrice"];
             this.OnHandQuantity = (int)dr["OnHandQuantity"];
             this.ConcurrencyID = (int)dr["ConcurrencyID"];

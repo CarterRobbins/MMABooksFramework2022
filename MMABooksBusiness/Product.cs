@@ -10,18 +10,16 @@ namespace MMABooksBusiness
     {
         public string ProductCode
         {
-            get
-            {
-                return ((ProductProps)mProps).ProductCode;
-            }
+            get => ((ProductProps)mProps).ProductCode;
             set
             {
-                if (!(value == ((ProductProps)mProps).ProductCode))
+                var v = (value ?? "").Trim();           
+                if (v != ((ProductProps)mProps).ProductCode)
                 {
-                    if (value.Trim().Length >= 1 && value.Trim().Length <= 10)
+                    if (v.Length >= 1 && v.Length <= 10)
                     {
                         mRules.RuleBroken("ProductCode", false);
-                        ((ProductProps)mProps).ProductCode = value;
+                        ((ProductProps)mProps).ProductCode = v;
                         mIsDirty = true;
                     }
                     else
@@ -34,18 +32,16 @@ namespace MMABooksBusiness
 
         public string Description
         {
-            get
-            {
-                return ((ProductProps)mProps).Description;
-            }
+            get => ((ProductProps)mProps).Description;
             set
             {
-                if (!(value == ((ProductProps)mProps).Description))
+                var v = (value ?? "").Trim();           
+                if (v != ((ProductProps)mProps).Description)
                 {
-                    if (value.Trim().Length >= 1 && value.Trim().Length <= 50)
+                    if (v.Length >= 1 && v.Length <= 50)
                     {
                         mRules.RuleBroken("Description", false);
-                        ((ProductProps)mProps).Description = value;
+                        ((ProductProps)mProps).Description = v;
                         mIsDirty = true;
                     }
                     else
@@ -58,16 +54,13 @@ namespace MMABooksBusiness
 
         public decimal UnitPrice
         {
-            get
-            {
-                return ((ProductProps)mProps).UnitPrice;
-            }
+            get => ((ProductProps)mProps).UnitPrice;
             set
             {
-                if (value >= 0)
+                if (value >= 0m)
                 {
                     mRules.RuleBroken("UnitPrice", false);
-                    ((ProductProps)mProps).UnitPrice = value;
+                    ((ProductProps)mProps).UnitPrice = Math.Round(value, 2);
                     mIsDirty = true;
                 }
                 else

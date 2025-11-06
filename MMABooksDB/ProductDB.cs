@@ -22,13 +22,16 @@ namespace MMABooksDB
             int rowsAffected = 0;
             ProductProps props = (ProductProps)p;
 
-            DBCommand command = new DBCommand();
-            command.CommandText = "usp_ProductCreate";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("prodcode_p", props.ProductCode);
-            command.Parameters.AddWithValue("desc_p", props.Description);
-            command.Parameters.AddWithValue("price_p", props.UnitPrice);
-            command.Parameters.AddWithValue("qty_p", props.OnHandQuantity);
+            DBCommand command = new DBCommand
+            {
+                CommandText = "usp_ProductCreate",
+                CommandType = CommandType.StoredProcedure
+            };
+
+            command.Parameters.Add("prodcode_p", DBDbType.VarChar).Value = props.ProductCode;
+            command.Parameters.Add("description_p", DBDbType.VarChar).Value = props.Description;
+            command.Parameters.Add("unitprice_p", DBDbType.Decimal).Value = props.UnitPrice;
+            command.Parameters.Add("onhandqty_p", DBDbType.Int32).Value = props.OnHandQuantity;
 
             try
             {
@@ -39,7 +42,9 @@ namespace MMABooksDB
                     return props;
                 }
                 else
+                {
                     throw new Exception("Unable to insert record. " + props.GetState());
+                }
             }
             finally
             {
@@ -50,29 +55,29 @@ namespace MMABooksDB
 
         public bool Delete(IBaseProps p)
         {
-            ProductProps props = (ProductProps)p;
-            int rowsAffected = 0;
+            var props = (ProductProps)p;
 
-            DBCommand command = new DBCommand();
-            command.CommandText = "usp_ProductDelete";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add("prodcode_p", DBDbType.VarChar);
-            command.Parameters.Add("conCurrId", DBDbType.Int32);
-            command.Parameters["prodcode_p"].Value = props.ProductCode;
-            command.Parameters["conCurrId"].Value = props.ConcurrencyID;
+            var fresh = (ProductProps)Retrieve(props.ProductCode);
+            props.ConcurrencyID = fresh.ConcurrencyID;
+
+            int rows = 0;
+            var command = new DBCommand
+            {
+                CommandText = "usp_ProductDelete",
+                CommandType = CommandType.StoredProcedure
+            };
+            command.Parameters.Add("prodcode_p", DBDbType.VarChar).Value = props.ProductCode;
+            command.Parameters.Add("conCurrId", DBDbType.Int32).Value = props.ConcurrencyID;
 
             try
             {
-                rowsAffected = RunNonQueryProcedure(command);
-                if (rowsAffected == 1)
-                    return true;
-                else
-                    throw new Exception("Record cannot be deleted. It has been edited by another user.");
+                rows = RunNonQueryProcedure(command);
+                if (rows == 1) return true;
+                throw new Exception("Record cannot be deleted; it has been edited by another user.");
             }
             finally
             {
-                if (mConnection.State == ConnectionState.Open)
-                    mConnection.Close();
+                if (mConnection.State == ConnectionState.Open) mConnection.Close();
             }
         }
 
@@ -80,12 +85,14 @@ namespace MMABooksDB
         {
             DBDataReader data = null;
             ProductProps props = new ProductProps();
-            DBCommand command = new DBCommand();
 
-            command.CommandText = "usp_ProductSelect";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add("prodcode_p", DBDbType.VarChar);
-            command.Parameters["prodcode_p"].Value = key.ToString();
+            DBCommand command = new DBCommand
+            {
+                CommandText = "usp_ProductSelect",
+                CommandType = CommandType.StoredProcedure
+            };
+
+            command.Parameters.Add("prodcode_p", DBDbType.VarChar).Value = key.ToString();
 
             try
             {
@@ -110,7 +117,6 @@ namespace MMABooksDB
         {
             List<ProductProps> list = new List<ProductProps>();
             DBDataReader reader = null;
-            ProductProps props;
 
             try
             {
@@ -119,7 +125,7 @@ namespace MMABooksDB
                 {
                     while (reader.Read())
                     {
-                        props = new ProductProps();
+                        ProductProps props = new ProductProps();
                         props.SetState(reader);
                         list.Add(props);
                     }
@@ -135,22 +141,24 @@ namespace MMABooksDB
 
         public bool Update(IBaseProps p)
         {
-            int rowsAffected = 0;
-            ProductProps props = (ProductProps)p;
+            var props = (ProductProps)p;
 
-            DBCommand command = new DBCommand();
-            command.CommandText = "usp_ProductUpdate";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add("prodcode_p", DBDbType.VarChar);
-            command.Parameters.Add("desc_p", DBDbType.VarChar);
-            command.Parameters.Add("price_p", DBDbType.Decimal);
-            command.Parameters.Add("qty_p", DBDbType.Int32);
-            command.Parameters.Add("conCurrId", DBDbType.Int32);
-            command.Parameters["prodcode_p"].Value = props.ProductCode;
-            command.Parameters["desc_p"].Value = props.Description;
-            command.Parameters["price_p"].Value = props.UnitPrice;
-            command.Parameters["qty_p"].Value = props.OnHandQuantity;
-            command.Parameters["conCurrId"].Value = props.ConcurrencyID;
+            
+            var fresh = (ProductProps)Retrieve(props.ProductCode);
+            props.ConcurrencyID = fresh.ConcurrencyID;
+
+            int rowsAffected = 0;
+            var command = new DBCommand
+            {
+                CommandText = "usp_ProductUpdate",
+                CommandType = CommandType.StoredProcedure
+            };
+
+            command.Parameters.Add("prodcode_p", DBDbType.VarChar).Value = props.ProductCode;
+            command.Parameters.Add("description_p", DBDbType.VarChar).Value = props.Description;
+            command.Parameters.Add("unitprice_p", DBDbType.Decimal).Value = props.UnitPrice;
+            command.Parameters.Add("onhandqty_p", DBDbType.Int32).Value = props.OnHandQuantity;
+            command.Parameters.Add("conCurrId", DBDbType.Int32).Value = props.ConcurrencyID;
 
             try
             {
@@ -160,15 +168,12 @@ namespace MMABooksDB
                     props.ConcurrencyID++;
                     return true;
                 }
-                else
-                    throw new Exception("Record cannot be updated. It has been edited by another user.");
+                throw new Exception("Record cannot be updated; it has been edited by another user.");
             }
             finally
             {
-                if (mConnection.State == ConnectionState.Open)
-                    mConnection.Close();
+                if (mConnection.State == ConnectionState.Open) mConnection.Close();
             }
         }
     }
 }
-

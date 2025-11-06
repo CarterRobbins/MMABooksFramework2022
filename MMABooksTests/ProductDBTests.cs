@@ -19,11 +19,9 @@ namespace MMABooksTests
         public void ResetData()
         {
             db = new ProductDB();
-            var command = new DBCommand
-            {
-                CommandText = "usp_testingResetProductData",
-                CommandType = CommandType.StoredProcedure
-            };
+            var command = new DBCommand();
+            command.CommandText = "usp_testingResetProductData";
+            command.CommandType = CommandType.StoredProcedure;
             db.RunNonQueryProcedure(command);
         }
 
@@ -56,9 +54,7 @@ namespace MMABooksTests
         public void TestDeleteForeignKeyConstraint()
         {
             Assert.Inconclusive("Set a known referenced ProductCode to fully exercise FK delete.");
-            // Example if you know one is referenced:
-            // var p = (ProductProps)db.Retrieve("A4CS");
-            // Assert.Throws<MySqlException>(() => db.Delete(p));
+
         }
 
         [Test]
